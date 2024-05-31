@@ -15,7 +15,7 @@ let gameInterval;
 let gameSpeedDelay = 200;
 let gameStarted = false;
 
-// Drawing the game map, snake, and food
+// Draw game map, snake, food
 function draw() {
   board.innerHTML = "";
   drawSnake();
@@ -39,7 +39,13 @@ function createGameElement(tag, className) {
   return element;
 }
 
-// Drawing the food function
+// Set the position of snake or food
+function setPosition(element, position) {
+  element.style.gridColumn = position.x;
+  element.style.gridRow = position.y;
+}
+
+// Drawing the food
 function drawFood() {
   if (gameStarted) {
     const foodElement = createGameElement("div", "food");
@@ -55,12 +61,7 @@ function generateFood() {
   return { x, y };
 }
 
-// Setting the position of the snake, or the food
-function setPosition(element, position) {
-  element.style.gridColumnStart = position.x; // Horizontal
-  element.style.gridRowStart = position.y; // Vertical
-}
-
+// Moving the snake
 function move() {
   const head = { ...snake[0] };
   switch (direction) {
@@ -86,6 +87,7 @@ function move() {
     clearInterval(gameInterval);
     gameInterval = setInterval(() => {
       move();
+      checkCollision();
       draw();
     }, gameSpeedDelay);
   } else {
@@ -93,8 +95,9 @@ function move() {
   }
 }
 
+// Starting the game
 function startGame() {
-  gameStarted = true;
+  gameStarted = true; // Keep track of a running game
   instructions.style.display = "none";
   logo.style.display = "none";
   gameInterval = setInterval(() => {
@@ -104,9 +107,12 @@ function startGame() {
   }, gameSpeedDelay);
 }
 
-// Keypress Event Listener
+// Keypress event listener
 function handleKeyPress(event) {
-  if (!gameStarted && event.code === "Space") {
+  if (
+    (!gameStarted && event.code === "Space") ||
+    (!gameStarted && event.key === " ")
+  ) {
     startGame();
   } else {
     switch (event.key) {
@@ -143,17 +149,13 @@ function increaseSpeed() {
 function checkCollision() {
   const head = snake[0];
 
-  // Check if the snake hits the boundary
   if (head.x < 1 || head.x > gridSize || head.y < 1 || head.y > gridSize) {
     resetGame();
-    return;
   }
 
-  // Check if the snake hits itself
   for (let i = 1; i < snake.length; i++) {
     if (head.x === snake[i].x && head.y === snake[i].y) {
       resetGame();
-      return;
     }
   }
 }
