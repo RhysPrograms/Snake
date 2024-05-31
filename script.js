@@ -1,11 +1,11 @@
-// Define the HTML elements
+// Defining the HTML elements
 const board = document.querySelector(".game-board");
 const instructions = document.querySelector("#instruction-text");
 const logo = document.querySelector("#logo");
 const score = document.querySelector("#score");
 const highScoreText = document.querySelector("#highScore");
 
-// Define the game variables
+// Defining the game variables
 const gridSize = 20;
 let snake = [{ x: 10, y: 10 }];
 let food = generateFood();
@@ -15,7 +15,7 @@ let gameInterval;
 let gameSpeedDelay = 200;
 let gameStarted = false;
 
-// Draw the game map, snake, and food
+// Drawing the game map, snake, and food
 function draw() {
   board.innerHTML = "";
   drawSnake();
@@ -23,7 +23,7 @@ function draw() {
   updateScore();
 }
 
-// Draw the snake
+// Drawing the snake
 function drawSnake() {
   snake.forEach((segment) => {
     const snakeElement = createGameElement("div", "snake");
@@ -39,13 +39,7 @@ function createGameElement(tag, className) {
   return element;
 }
 
-// Set the position of the snake, or the food
-function setPosition(element, position) {
-  element.style.gridColumnStart = position.x; // Horizontal
-  element.style.gridRowStart = position.y; // Vertical
-}
-
-// Draw food function
+// Drawing the food function
 function drawFood() {
   if (gameStarted) {
     const foodElement = createGameElement("div", "food");
@@ -59,6 +53,12 @@ function generateFood() {
   const x = Math.floor(Math.random() * gridSize) + 1;
   const y = Math.floor(Math.random() * gridSize) + 1;
   return { x, y };
+}
+
+// Setting the position of the snake, or the food
+function setPosition(element, position) {
+  element.style.gridColumnStart = position.x; // Horizontal
+  element.style.gridRowStart = position.y; // Vertical
 }
 
 function move() {
@@ -93,11 +93,6 @@ function move() {
   }
 }
 
-// setInterval(() => {
-//   move();
-//   draw();
-// }, 200);
-
 function startGame() {
   gameStarted = true;
   instructions.style.display = "none";
@@ -108,8 +103,6 @@ function startGame() {
     draw();
   }, gameSpeedDelay);
 }
-
-//draw();
 
 // Keypress Event Listener
 function handleKeyPress(event) {
@@ -171,7 +164,7 @@ function resetGame() {
   direction = "right";
   gameSpeedDelay = 200;
   updateScore();
-  updateHighScore(); // Move the updateHighScore call here
+  updateHighScore();
   stopGame();
 }
 
